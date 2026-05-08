@@ -87,5 +87,6 @@ The included model is Cellpose cyto3 fine-tuned on 51 hand-annotated phase contr
 |---|---|
 | Base cyto3 | 0.523 |
 | Fine-tuned | 0.624 |
+| Base cpsam | 0.568 |
 
 Training config: 500 epochs, lr=0.001, weight_decay=1e-5, diameter=17px.
