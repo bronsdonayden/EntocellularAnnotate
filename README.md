@@ -109,10 +109,13 @@ Pairs `<root>/patches/img_NNNN.npy` with `<root>/masks/mask_NNNN.npy`, splits of
 
 The included model is Cellpose cyto3 fine-tuned on 51 hand-annotated phase contrast patches.
 
-| | AP@0.5 |
-|---|---|
-| Base cyto3 | 0.523 |
-| Fine-tuned | 0.624 |
-| Base cpsam | 0.568 |
+| | AP@0.5 | Eval |
+|---|---|---|
+| Base cyto3 | 0.523 | `finetune.ipynb` test split |
+| Fine-tuned cyto3 | 0.624 | `finetune.ipynb` test split |
+| Base cpsam | 0.515 | img0 val (16 patches) |
+| Fine-tuned cpsam | 0.688 | img0 val (16 patches) |
 
-Training config: 500 epochs, lr=0.001, weight_decay=1e-5, diameter=17px.
+Training config:
+- cyto3: 500 epochs, lr=0.001, weight_decay=1e-5, diameter=17px
+- cpsam: 100 epochs, lr=1e-5, weight_decay=0.1 (defaults from `cpsam_train.py`)
