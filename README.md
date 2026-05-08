@@ -8,6 +8,8 @@ Includes a Napari-based annotation tool with **model-assisted pre-labeling** —
 
 ```
 ├── annotate.py                 # Napari annotation tool
+├── cpsam_inf.py                # Cellpose-SAM inference (local)
+├── cpsam_train.py              # Cellpose-SAM fine-tuning (local)
 ├── generate_patches.ipynb      # Chunk TIFFs into patches (Colab)
 ├── finetune.ipynb              # Fine-tune Cellpose + evaluate (Colab)
 ├── generate_predictions.ipynb  # Generate pred_masks for annotation (Colab)
@@ -60,6 +62,30 @@ python annotate.py -i img0/patches -o img0/masks -p img0/pred_masks --start 50
 | `-o`, `--output` | Directory to save `mask_*.npy` annotations (required) |
 | `-p`, `--preds` | Directory with `pred_*.npy` predictions (optional) |
 | `--start` | Patch index to start from (default: 0) |
+
+## Cellpose-SAM (local)
+
+Inference and fine-tuning scripts that run against the on-disk `<root>/patches/` and `<root>/masks/` layout.
+
+### Inference
+
+```bash
+python cpsam_inf.py --root img0 --n 51                 # first 51 patches in img0
+python cpsam_inf.py --root img0 --indices 0 7 42       # specific indices
+python cpsam_inf.py --model models/cpsam_finetuned     # use a fine-tuned checkpoint
+python cpsam_inf.py --root img0 --out-name pred_masks  # overwrite canonical seeds
+```
+
+Default output dir is `<root>/preds_<timestamp>/`. Pass `--view` to inspect each prediction in Napari.
+
+### Fine-tuning
+
+```bash
+python cpsam_train.py                                  # all roots: img0, img1
+python cpsam_train.py --root img0 --epochs 200 --lr 5e-5 --model-name my_cells
+```
+
+Pairs `<root>/patches/img_NNNN.npy` with `<root>/masks/mask_NNNN.npy`, splits off `--val-frac` (default 0.15), and saves the checkpoint under `models/`.
 
 ## Napari Controls
 
